@@ -13,8 +13,8 @@
       src: '{{item.src}}'
       dest: '{{item.dest}}'
     with_items:
-      - { src: '/opt/default.conf', dest: '/opt/' }
-      - { src: '/opt/dist', dest: '/opt/' }
+      - { src: '/opt/install-service/default.conf', dest: '/opt/' }
+      - { src: '/opt/install-service/dist', dest: '/opt/' }
       
    - name: 运行nginx
      shell: docker run -d --name nginx --restart=always -v /opt/dist:/usr/share/nginx/html -v /opt/default.conf:/etc/nginx/conf.d/default.conf nginx
