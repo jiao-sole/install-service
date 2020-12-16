@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  remote_user: root
+  gather_facts: false
+  vars:
+  - mysql_user: root
+  - mysql_password: CBvt.123
+  tasks:
+  - name: 创建数据库
+    mysql_db:
+      login_user: '{{mysql_user}}'
+      login_password: '{{mysql_password}}'
+      name: '{{item.dbname}}'
+      encoding: utf8
+      state: present
+    with_items:
+      - { dbname: 'mp_alarm' }
+      - { dbname: 'mp_control_monitor' }
+      - { dbname: 'mp_master_control' }
+      - { dbname: 'mp_system_platform' }
+      - { dbname: 'mp_status' }
