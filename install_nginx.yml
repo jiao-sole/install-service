@@ -7,7 +7,7 @@
   tasks:
   - name: 拉取nginx镜像文件
     shell: docker pull nginx
-    
+
   - name: 分发配置文件与网页文件
     copy:
       src: '{{item.src}}'
@@ -15,6 +15,6 @@
     with_items:
       - { src: '/opt/install-service/default.conf', dest: '/opt/' }
       - { src: '/opt/install-service/dist', dest: '/opt/' }
-      
-   - name: 运行nginx
-     shell: docker run -d --name nginx --restart=always -v /opt/dist:/usr/share/nginx/html -v /opt/default.conf:/etc/nginx/conf.d/default.conf nginx
+
+  - name: 运行nginx
+    shell: docker run -d --name nginx --restart=always -p 8080:80 -v /opt/dist:/usr/share/nginx/html -v /opt/default.conf:/etc/nginx/conf.d/default.conf nginx
