@@ -1,0 +1,11 @@
+#安装mariadb
+
+---
+- hosts: localhost
+  remote_user: root
+  gather_facts: false
+  tasks:
+  - name: 安装mariadb
+    yum:
+      name: mariadb-server
+      state: present
