@@ -1,0 +1,12 @@
+#安装消息队列服务
+
+---
+- hosts: localhost
+  remote_user: root
+  gather_facts: false
+  tasks:
+  - name: 拉取消息队列镜像
+    shell: docker pull webcenter/activemq
+    
+  - name: 安装消息队列服务
+    shell: docker run -d --name activemq --restart=always -p 8161:8161 -p 61613:61613 -p 61614:61614 webcenter/activemq
