@@ -1,0 +1,20 @@
+#使用docker部署nginx
+
+---
+- hosts: localhost
+  remote_user: root
+  gather_facts: false
+  tasks:
+  - name: 拉取nginx镜像文件
+    shell: docker pull nginx
+    
+  - name: 分发配置文件与网页文件
+    copy:
+      src: '{{item.src}}'
+      dest: '{{item.dest}}'
+    with_items:
+      - { src: '/opt/default.conf', dest: '/opt/' }
+      - { src: '/opt/dist', dest: '/opt/' }
+      
+   - name: 运行nginx
+     shell: docker run -d --name nginx --restart=always -v /opt/dist:/usr/share/nginx/html -v /opt/default.conf:/etc/nginx/conf.d/default.conf nginx
