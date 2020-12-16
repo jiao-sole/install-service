@@ -1,0 +1,38 @@
+#用于安装nodejs环境
+
+---
+- hosts: localhost
+  remote_user: root
+  gather_facts: false
+  tasks:
+  - name: 分发Nodejs二进制包
+    copy:
+      src: /opt/node-v14.14.0-linux-x64.tar.xz
+      dest: /opt/
+    changed_when: false
+    register: copy_result
+
+  - name: 解压压缩文件
+    unarchive:
+      src: /opt/node-v14.14.0-linux-x64.tar.xz
+      dest: /opt/
+    failed_when: copy_result.failed != false
+    changed_when: false
+    register: tar_result
+
+  - name: 安装Nodejs
+    file:
+      src: '{{item.src}}'
+      dest: '{{item.dest}}'
+      state: link
+    with_items:
+      - { src: '/opt/node-v14.14.0-linux-x64/bin/node',dest: '/usr/local/bin/node' }
+      - { src: '/opt/node-v14.14.0-linux-x64/bin/pm2',dest: '/usr/local/bin/pm2' }
+    changed_when: false
+    failed_when: tar_result.failed != false
+
+  - name: 删除安装包文件
+    file:
+      path: /opt/node-v14.14.0-linux-x64.tar.xz
+      state: absent
+    changed_when: false
