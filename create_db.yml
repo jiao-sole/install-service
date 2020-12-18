@@ -1,0 +1,36 @@
+#创建数据库并且导入脚本
+
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+  - user: root
+  - pwd: cbvt8888
+  tasks:
+  - name: 创建数据库
+    mysql_db:
+      login_user: '{{user}}'
+      login_password: '{{pwd}}'
+      name: '{{item}}'
+      state: present
+    with_items:
+      - 'mp_status'
+      - 'mp_alarm'
+      - 'mp_control_monitor'
+      - 'mp_master_control'
+      - 'mp_system_platform'
+
+  - name: 导入sql
+    mysql_db:
+      login_user: '{{user}}'
+      login_password: '{{pwd}}'
+      name: '{{item.database}}'
+      state: import
+      target: '{{item.sql}}'
+    with_items:
+      - { database: 'mp_status', sql: 'mp_status.sql' }
+      - { database: 'mp_alarm', sql: 'mp_alarm.sql' }
+      - { database: 'mp_control_monitor', sql: 'mp_control_monitor.sql' }
+      - { database: 'mp_master_control', sql: 'mp_master_control.sql' }
+      - { database: 'mp_system_platform', sql: 'mp_system_platform.sql' }
+      - { database: 'mp_system_platform', sql: 'mp_system_platform_procedure.sql' }
